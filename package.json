@@ -1,0 +1,80 @@
+{
+  "name": "node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "keywords": [
+    "node",
+    "fullstack",
+    "postgresql"
+  ],
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/node-react-test/node.git"
+  },
+  "author": {
+    "name": "Paulo César da Silva",
+    "email": "paulocsmg@gmail.com",
+    "url": "https://www.linkedin.com/in/pcs980"
+  },
+  "bugs": {
+    "url": "https://gitlab.com/node-react-test/node/issues"
+  },
+  "homepage": "https://gitlab.com/node-react-test/node",
+  "scripts": {
+    "build": "tsc",
+    "debug": "tsnd --inspect --respawn src/index.ts",
+    "dev": "tsnd --transpile-only src/index.ts",
+    "test": "jest"
+  },
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pg": "^8.5.1",
+    "sequelize": "^6.6.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/jest": "^26.0.22",
+    "@types/node": "^14.14.37",
+    "@types/pg": "^7.14.11",
+    "husky": "^6.0.0",
+    "jest": "^26.6.3",
+    "jest-sonar-reporter": "^2.0.0",
+    "ts-jest": "^26.5.4",
+    "ts-node": "^9.1.1",
+    "ts-node-dev": "^1.1.6",
+    "tslint": "^6.1.3",
+    "typescript": "^4.2.4"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageDirectory": "coverage/typescript",
+    "coverageReporters": [
+      "json",
+      "html",
+      "lcov",
+      "text"
+    ],
+    "setupFiles": [
+      "<rootDir>/test/setup.js"
+    ],
+    "verbose": true,
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "testResultsProcessor": "jest-sonar-reporter"
+  }
+}
