@@ -1,0 +1,15 @@
+{
+  "development": {
+    "username": "wayjkxqnuxqdsu",
+    "password": "ad5c8cb95bdc37c1006c116d66dbf1e8fa6bfa686db2ac8bbeab257a35e91c4d",
+    "database": "d3f67svvqrr2eq",
+    "host": "ec2-23-21-229-200.compute-1.amazonaws.com",
+    "dialect": "postgres",
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}

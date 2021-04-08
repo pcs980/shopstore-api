@@ -67,6 +67,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?)$",
+    "testTimeout": 8000,
     "moduleFileExtensions": [
       "ts",
       "tsx",
