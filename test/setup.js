@@ -1,5 +1,6 @@
 process.env.LOG_LEVEL = 'debug';
 process.env.NODE_ENV = 'test';
+process.env.JWT_SK = 'Sup3r5Ecr37k3y';
 
 process.env.DB_NAME = 'd3f67svvqrr2eq';
 process.env.DB_URL = 'ec2-23-21-229-200.compute-1.amazonaws.com';

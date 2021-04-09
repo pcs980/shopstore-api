@@ -1,5 +1,5 @@
-export default class DatabaseError extends Error {
-  public readonly name = 'DatabaseError';
+export default class InternalError extends Error {
+  public readonly name = 'InternalError';
 
   constructor(
     public code: string,
