@@ -62,7 +62,6 @@ const getOne = async (request: GetUserRequest): Promise<UserModel> => {
 
 const signin = async (credential: SigninRequest, user?: UserModel): Promise<UserModel> => {
   try {
-    logger.debug(user ? 'Received user' : 'No user');
     const userResult = user ? user : await getOne({ email: credential.email });
     const isValidPassword = await compareHash(credential.password, userResult.password);
 
@@ -90,8 +89,6 @@ const signin = async (credential: SigninRequest, user?: UserModel): Promise<User
 const signup = async (user: CreateUserRequest): Promise<UserModel> => {
   const newUser = await create(user);
   const signedUser = await signin({ email: newUser.email, password: user.password }, newUser);
-
-  signedUser.password = '';
   return signedUser;
 };
 

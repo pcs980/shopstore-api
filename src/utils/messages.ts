@@ -18,10 +18,10 @@ export const invalidRequest = (message: string) => ({
 
 export const invalidName = (name: string) => ({
   code: INVALID_REQUEST,
-  message: `Invalid name: ${name}`,
+  message: `Invalid name: "${name}"`,
 });
 
 export const invalidEmail = (email: string) => ({
   code: INVALID_REQUEST,
-  message: `Invalid e-mail address: ${email}`,
+  message: `Invalid e-mail address: "${email}"`,
 });
