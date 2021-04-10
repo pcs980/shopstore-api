@@ -4,6 +4,8 @@ import { logger } from '../utils/logger';
 import { compareHash, hashText } from '../utils/crypt';
 import { signPayload } from '../utils/jwt';
 import User from '../models/user';
+import { sendEmail } from './email';
+import { generateCode } from '../utils/generators';
 
 export interface SigninRequest {
   email: string;
@@ -20,10 +22,18 @@ const create = async (user: CreateUserRequest): Promise<UserModel> => {
     const hashedPassword = await hashText(user.password);
     const result: UserModel = await UserModel.create<UserModel>({
       ...user,
+      verification_code: generateCode(4),
       password: hashedPassword,
     });
-
     logger.debug(`New user: ${JSON.stringify(result)}`);
+
+    sendEmail({
+      code: result.verification_code,
+      email: result.email,
+      name: result.name,
+      subject: 'Confirm your e-mail'
+    });
+
     return <UserModel>result.toJSON();
   } catch (error) {
     logger.error(`Create user error: ${JSON.stringify(error)}`);

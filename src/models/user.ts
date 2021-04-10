@@ -13,12 +13,13 @@ interface UserAttributes {
   password: string;
   email: string;
   token?: string;
-  email_verified?: boolean;
+  verification_code: string;
+  email_verified: boolean;
   registered_at?: Date;
   updated_at?: Date;
 }
 export interface CreateUserRequest extends
-  Optional<UserAttributes, 'id' | 'registered_at' | 'email_verified' | 'token' | 'updated_at'> {}
+  Optional<UserAttributes, 'id' | 'token' | 'email_verified' | 'verification_code' | 'registered_at' | 'updated_at'> {}
 
 class User extends Model<UserAttributes, CreateUserRequest> implements UserAttributes {
   public id!: number;
@@ -26,6 +27,7 @@ class User extends Model<UserAttributes, CreateUserRequest> implements UserAttri
   public email!: string;
   public password!: string;
   public token!: string;
+  public verification_code!: string;
   public email_verified!: boolean;
   public readonly registered_at!: Date;
   public readonly updated_at!: Date;
@@ -48,6 +50,10 @@ User.init({
   },
   password: {
     type: DataTypes.STRING(80),
+    allowNull: false,
+  },
+  verification_code: {
+    type: DataTypes.STRING(5),
     allowNull: false,
   },
   email_verified: {
