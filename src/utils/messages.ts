@@ -1,6 +1,6 @@
 export interface ResponseErrorBody {
   code: string;
-  message: string;
+  error: string;
   detail?: string;
 }
 
@@ -8,20 +8,20 @@ const INVALID_REQUEST = 'INVALID_REQUEST';
 
 export const emptyBody = {
   code: 'EMPTY_BODY',
-  message: 'Request with empty body',
+  error: 'Request with empty body',
 };
 
-export const invalidRequest = (message: string) => ({
+export const invalidRequest = (error: string) => ({
   code: INVALID_REQUEST,
-  message,
+  error,
 });
 
 export const invalidName = (name: string) => ({
   code: INVALID_REQUEST,
-  message: `Invalid name: "${name}"`,
+  error: `Invalid name: "${name}"`,
 });
 
 export const invalidEmail = (email: string) => ({
   code: INVALID_REQUEST,
-  message: `Invalid e-mail address: "${email}"`,
+  error: `Invalid e-mail address: "${email}"`,
 });

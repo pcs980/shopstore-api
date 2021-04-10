@@ -4,4 +4,7 @@ export default {
   STATUS_NOT_FOUND: 404,
   STATUS_INVALID_REQUEST: 412,
   STATUS_INTERNAL_ERROR: 500,
+  DATABASE_ERROR: 'DatabaseError',
+  INTERNAL_ERROR: 'InternalError',
+  REQUEST_ERROR: 'RequestError',
 };

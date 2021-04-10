@@ -1,5 +1,7 @@
+import k from '../utils/constants';
+
 export default class DatabaseError extends Error {
-  public readonly name = 'DatabaseError';
+  public readonly name = k.DATABASE_ERROR;
 
   constructor(
     public code: string,

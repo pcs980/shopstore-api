@@ -35,7 +35,14 @@ const signup = async (req: Request, res: Response) => {
     res.status(k.STATUS_CREATED).json(result);
   } catch (error) {
     timer({ error: error.code });
-    res.status(k.STATUS_INTERNAL_ERROR).json(error);
+    logger.error(`User signup error: ${JSON.stringify(error)}`);
+    if (error.name !== k.STATUS_INTERNAL_ERROR) {
+      return res.status(k.STATUS_INVALID_REQUEST).json({
+        ...error,
+        error: error.message,
+      });
+    }
+    res.status(k.STATUS_INTERNAL_ERROR).json({...error});
   }
 };
 
@@ -65,7 +72,14 @@ const signin = async (req: Request, res: Response) => {
     res.status(k.STATUS_SUCCESS).json(result);
   } catch (error) {
     timer({ error: error.code });
-    res.status(k.STATUS_INTERNAL_ERROR).json(error);
+    logger.error(`User signin error: ${JSON.stringify(error)}`);
+    if (error.name !== k.STATUS_INTERNAL_ERROR) {
+      return res.status(k.STATUS_INVALID_REQUEST).json({
+        ...error,
+        error: error.message,
+      });
+    }
+    res.status(k.STATUS_INTERNAL_ERROR).json({...error});
   }
 };
 

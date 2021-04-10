@@ -1,11 +1,13 @@
+import k from '../utils/constants';
+
 export default class RequestError extends Error {
-  public readonly name = 'RequestError';
+  public readonly name = k.REQUEST_ERROR;
 
   constructor(
     public code: string,
-    public message: string,
+    public reason: string,
     public detail: string,
   ) {
-    super(message);
+    super(reason);
   }
 }
