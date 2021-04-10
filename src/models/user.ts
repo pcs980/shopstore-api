@@ -1,23 +1,24 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../utils/postgresql';
 
+export interface UserUpdateRequest {
+  id: number;
+  name?: string;
+  password?: string;
+}
+
 interface UserAttributes {
   id: number;
   name: string;
-  email: string;
   password: string;
+  email: string;
   token?: string;
   email_verified?: boolean;
   registered_at?: Date;
   updated_at?: Date;
 }
-export interface CreateUserRequest extends Optional<UserAttributes, 'id' | 'registered_at' | 'email_verified' | 'token'> {}
-
-export interface UserUpdateRequest {
-  id: number;
-  name: string;
-  password?: string;
-}
+export interface CreateUserRequest extends
+  Optional<UserAttributes, 'id' | 'registered_at' | 'email_verified' | 'token' | 'updated_at'> {}
 
 class User extends Model<UserAttributes, CreateUserRequest> implements UserAttributes {
   public id!: number;

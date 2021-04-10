@@ -10,6 +10,11 @@ export interface SigninRequest {
   password: string;
 }
 
+export interface GetUserRequest {
+  id?: number;
+  email?: string;
+}
+
 const create = async (user: CreateUserRequest): Promise<UserModel> => {
   try {
     const hashedPassword = await hashText(user.password);
@@ -42,15 +47,10 @@ const destroy = async (id: number): Promise<boolean> => {
   return result > 0;
 };
 
-interface GetUserRequest {
-  id?: number;
-  email?: string;
-}
-
-const get = async (request: GetUserRequest): Promise<UserModel> => {
-  const user = await UserModel.findOne({ where: { ...request} });
+const getOne = async (request: GetUserRequest): Promise<UserModel> => {
+  const user = await UserModel.findOne({ where: { ...request } });
   if (!user) {
-    logger.warn(`User not found: ${JSON.stringify(request)}`);
+    logger.warn(`User not found with id: ${request.id}`);
     throw new DatabaseError(
       'NOT_FOUND',
       'User not found',
@@ -62,10 +62,12 @@ const get = async (request: GetUserRequest): Promise<UserModel> => {
 
 const signin = async (credential: SigninRequest, user?: UserModel): Promise<UserModel> => {
   try {
-    const userResult = user ? user : await get({ email: credential.email });
+    logger.debug(user ? 'Received user' : 'No user');
+    const userResult = user ? user : await getOne({ email: credential.email });
     const isValidPassword = await compareHash(credential.password, userResult.password);
 
     if (!isValidPassword) {
+      logger.warn(`Invalid password: ${credential.email}/${credential.password}`);
       throw new RequestError(
         'INVALID_CREDENTIAL',
         'Your email or password is invalid password',
@@ -80,7 +82,7 @@ const signin = async (credential: SigninRequest, user?: UserModel): Promise<User
     userResult.token = token;
     return userResult;
   } catch (error) {
-    logger.error(`Signin error: ${JSON.stringify(error)}`)
+    logger.error(`Signin error: ${error.message} ${JSON.stringify(error)}`)
     throw error;
   }
 };
@@ -88,6 +90,8 @@ const signin = async (credential: SigninRequest, user?: UserModel): Promise<User
 const signup = async (user: CreateUserRequest): Promise<UserModel> => {
   const newUser = await create(user);
   const signedUser = await signin({ email: newUser.email, password: user.password }, newUser);
+
+  signedUser.password = '';
   return signedUser;
 };
 
@@ -108,18 +112,18 @@ const update = async (request: UserUpdateRequest): Promise<UserModel> => {
     });
     logger.debug(`Update affected ${count} rows`);
   } catch (error) {
-    logger.error(`Update user error: ${JSON.stringify(error)}`);
+    logger.error(`Update user error: ${error.message} ${JSON.stringify(error)}`);
     throw new DatabaseError(
       'UPDATE_ERROR',
       error.message,
       JSON.stringify(request),
-    )
+    );
   }
 
   if (count === 0) {
     throw new DatabaseError(
       'NOT_FOUND',
-      'Update affect no user',
+      'Update affect no users',
       JSON.stringify(request),
     );
   }
@@ -129,7 +133,7 @@ const update = async (request: UserUpdateRequest): Promise<UserModel> => {
 export {
   create,
   destroy,
-  get,
+  getOne,
   signin,
   signup,
   update,

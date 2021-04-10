@@ -1,5 +1,5 @@
 import { CreateUserRequest, UserUpdateRequest } from '../../src/models/user';
-import { create, destroy, get, signin, signup, update } from '../../src/services/users';
+import { create, destroy, getOne, signin, signup, update } from '../../src/services/users';
 
 describe('User Service', () => {
   let userId = 0;
@@ -25,7 +25,6 @@ describe('User Service', () => {
 
   test('should return token when password is correct', async () => {
     const result = await signin({ email: 'john@company.com', password: '123456' });
-    console.log(result);
     expect(result.id).toBe(userId);
     expect(result.name).toBe('John Smith');
     expect(result).toHaveProperty('token');
@@ -35,6 +34,7 @@ describe('User Service', () => {
   test('should return error when password is not correct', async () => {
     try {
       await signin({ email: 'john@company.com', password: 'wrong' });
+      fail();
     } catch (error) {
       expect(error.code).toBe('INVALID_CREDENTIAL');
       expect(error.detail).toBe('john@company.com');
@@ -57,9 +57,18 @@ describe('User Service', () => {
     }
   });
 
+  test('should get user', async () => {
+    const result = await getOne({ email: 'john@company.com' });
+    expect(result.id).toBe(userId);
+    expect(result.name).toBe('John Smith');
+    expect(result.email).toBe('john@company.com');
+    expect(result.email_verified).toBe(false);
+  });
+
   test('should throw error when user is not found', async () => {
     try {
-      await get({ email: 'not@found.com' });
+      await getOne({ email: 'not@found.com' });
+      fail();
     } catch (error) {
       expect(error.code).toBe('NOT_FOUND');
     }
@@ -72,14 +81,12 @@ describe('User Service', () => {
       password: '654321'
     }
     const result = await update(request);
-    console.log(result);
     expect(result.id).toBe(userId);
     expect(result.name).toBe('John Francis Smith');
   });
 
   test('should signin with new credential', async () => {
     const result = await signin({ email: 'john@company.com', password: '654321' });
-    console.log(result);
     expect(result.id).toBe(userId);
     expect(result.name).toBe('John Francis Smith');
     expect(result).toHaveProperty('token');

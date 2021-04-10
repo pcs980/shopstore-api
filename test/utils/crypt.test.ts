@@ -12,7 +12,6 @@ describe('Encryption Utilities', () => {
     const text = 'password';
     const firstHash = await hashText(text);
     const secondHash = await hashText(text);
-    console.log({firstHash, secondHash});
     expect(firstHash).not.toBeUndefined();
     expect(secondHash).not.toBe(text);
     expect(firstHash).not.toBe(secondHash);
