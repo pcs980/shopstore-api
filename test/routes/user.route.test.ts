@@ -3,7 +3,7 @@ import app from '../../src/app';
 
 describe('User Routes', () => {
   describe('POST /signup', () => {
-    test('should return error if body is empty', async (done) => {
+    it('should return error if body is empty', async (done) => {
       request(app)
         .post('/signup')
         .send({})
@@ -19,7 +19,7 @@ describe('User Routes', () => {
         });
     });
 
-    test('should return error if name is invalid', async (done) => {
+    it('should return error if name is invalid', async (done) => {
       request(app)
         .post('/signup')
         .send({name: '  '})
@@ -35,7 +35,7 @@ describe('User Routes', () => {
         });
     });
 
-    test('should return error if password is invalid', async (done) => {
+    it('should return error if password is invalid', async (done) => {
       request(app)
         .post('/signup')
         .send({name: 'name', password: ''})
@@ -51,7 +51,7 @@ describe('User Routes', () => {
         });
     });
 
-    test('should return error if email is invalid', async (done) => {
+    it('should return error if email is invalid', async (done) => {
       request(app)
         .post('/signup')
         .send({name: 'Name', password: '123', email: 'email.com'})
@@ -68,7 +68,7 @@ describe('User Routes', () => {
     });
   });
   describe('POST /signin', () => {
-    test('should return error if body is empty', async (done) => {
+    it('should return error if body is empty', async (done) => {
       request(app)
         .post('/signin')
         .send({})
@@ -84,7 +84,7 @@ describe('User Routes', () => {
         });
     });
 
-    test('should return error if password is invalid', async (done) => {
+    it('should return error if password is invalid', async (done) => {
       request(app)
         .post('/signin')
         .send({email: 'john@company.com', password: ''})
@@ -100,7 +100,7 @@ describe('User Routes', () => {
         });
     });
 
-    test('should return error if email is invalid', async (done) => {
+    it('should return error if email is invalid', async (done) => {
       request(app)
         .post('/signin')
         .send({email: 'email.com', password: '123'})

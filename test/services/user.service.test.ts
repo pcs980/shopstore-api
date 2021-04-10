@@ -4,7 +4,7 @@ import { create, destroy, getOne, signin, signup, update } from '../../src/servi
 describe('User Service', () => {
   let userId = 0;
 
-  test('should signup a new user', async () => {
+  it('should signup a new user', async () => {
     const user: CreateUserRequest = {
       name: 'John Smith',
       email: 'john@company.com',
@@ -23,7 +23,7 @@ describe('User Service', () => {
     userId = result.id;
   });
 
-  test('should return token when password is correct', async () => {
+  it('should return token when password is correct', async () => {
     const result = await signin({ email: 'john@company.com', password: '123456' });
     expect(result.id).toBe(userId);
     expect(result.name).toBe('John Smith');
@@ -31,7 +31,7 @@ describe('User Service', () => {
     expect(result.token).not.toBeUndefined();
   });
 
-  test('should return error when password is not correct', async () => {
+  it('should return error when password is not correct', async () => {
     try {
       await signin({ email: 'john@company.com', password: 'wrong' });
       fail();
@@ -41,7 +41,7 @@ describe('User Service', () => {
     }
   });
 
-  test('should throw error if email is duplicated', async () => {
+  it('should throw error if email is duplicated', async () => {
     const user: CreateUserRequest = {
       name: 'John Smith',
       email: 'john@company.com',
@@ -57,7 +57,7 @@ describe('User Service', () => {
     }
   });
 
-  test('should get user', async () => {
+  it('should get user', async () => {
     const result = await getOne({ email: 'john@company.com' });
     expect(result.id).toBe(userId);
     expect(result.name).toBe('John Smith');
@@ -65,7 +65,7 @@ describe('User Service', () => {
     expect(result.email_verified).toBe(false);
   });
 
-  test('should throw error when user is not found', async () => {
+  it('should throw error when user is not found', async () => {
     try {
       await getOne({ email: 'not@found.com' });
       fail();
@@ -74,7 +74,7 @@ describe('User Service', () => {
     }
   });
 
-  test('should update user name and password', async () => {
+  it('should update user name and password', async () => {
     const request: UserUpdateRequest = {
       id: userId,
       name: 'John Francis Smith',
@@ -85,7 +85,7 @@ describe('User Service', () => {
     expect(result.name).toBe('John Francis Smith');
   });
 
-  test('should signin with new credential', async () => {
+  it('should signin with new credential', async () => {
     const result = await signin({ email: 'john@company.com', password: '654321' });
     expect(result.id).toBe(userId);
     expect(result.name).toBe('John Francis Smith');
@@ -93,7 +93,7 @@ describe('User Service', () => {
     expect(result.token).not.toBeUndefined();
   });
 
-  test('should delete a user by id', async () => {
+  it('should delete a user by id', async () => {
     const result = await destroy(userId);
     expect(result).toBe(true);
   });

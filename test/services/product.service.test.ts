@@ -4,7 +4,7 @@ import { create, destroy, getOne, update } from '../../src/services/products';
 describe('Product Service', () => {
   let productId = 0;
 
-  test('should create a product', async () => {
+  it('should create a product', async () => {
     const product: CreateProductRequest = {
       name: 'Example',
       description: 'Description of product example',
@@ -21,14 +21,14 @@ describe('Product Service', () => {
     productId = result.id;
   });
 
-  test('should get product', async () => {
+  it('should get product', async () => {
     const result = await getOne({ id: productId });
     expect(result.id).toBe(productId);
     expect(result.name).toBe('Example');
     expect(result.price).toBe('88.96');
   });
 
-  test('should throw error when product is not found', async () => {
+  it('should throw error when product is not found', async () => {
     try {
       await getOne({ id: 9999 });
       fail();
@@ -37,7 +37,7 @@ describe('Product Service', () => {
     }
   });
 
-  test('should throw error if product name is duplicated', async () => {
+  it('should throw error if product name is duplicated', async () => {
     const product: CreateProductRequest = {
       name: 'Example',
       price: 88.96
@@ -52,7 +52,7 @@ describe('Product Service', () => {
     }
   });
 
-  test('should update product price and code', async () => {
+  it('should update product price and code', async () => {
     const request: ProductUpdateRequest = {
       id: productId,
       price: 174.10,
@@ -64,7 +64,7 @@ describe('Product Service', () => {
     expect(result.code).toBe('7890000555');
   });
 
-  test('should delete a product by id', async () => {
+  it('should delete a product by id', async () => {
     const result = await destroy(productId);
     expect(result).toBe(true);
   });
