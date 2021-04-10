@@ -1,21 +1,34 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../utils/postgresql';
 
+export interface ProductUpdateRequest {
+  id: number;
+  name?: string;
+  description?: string;
+  code?: string;
+  price?: number;
+}
+
 interface ProductAttributes {
   id: number;
   name: string;
-  description: string;
+  description?: string;
+  code?: string;
   price: number;
+  active?: boolean;
   published_at?: Date;
   updated_at?: Date;
 }
-export interface ProductCreationAttributes extends Optional<ProductAttributes, 'id' | 'published_at' | 'description'> {}
+export interface CreateProductRequest extends
+  Optional<ProductAttributes, 'id' | 'published_at' | 'updated_at'> {}
 
-class Product extends Model<ProductAttributes, ProductCreationAttributes> implements ProductAttributes {
+class Product extends Model<ProductAttributes, CreateProductRequest> implements ProductAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
+  public code!: string;
   public price!: number;
+  public active!: boolean;
   public readonly published_at!: Date;
   public readonly updated_at!: Date;
 }
@@ -34,9 +47,17 @@ Product.init({
   description: {
     type: DataTypes.STRING(150),
   },
+  code: {
+    type: DataTypes.STRING(20),
+    unique: true,
+  },
   price: {
     type: DataTypes.DECIMAL(10, 2),
     defaultValue: 0,
+  },
+  active: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 }, {
   sequelize,
@@ -47,37 +68,3 @@ Product.init({
 });
 
 export default Product;
-
-/*
-Product {
-  dataValues: {
-    published_at: 2021-04-08T00:44:27.303Z,
-    id: '1',
-    name: 'Novo produto',
-    description: 'Descrição do produto',
-    price: '88.96',
-    updated_at: 2021-04-08T00:44:27.304Z,
-    created_at: 2021-04-08T00:44:27.304Z
-  },
-  _previousDataValues: {
-    name: 'Novo produto',
-    description: 'Descrição do produto',
-    price: '88.96',
-    id: '1',
-    published_at: 2021-04-08T00:44:27.303Z,
-    created_at: 2021-04-08T00:44:27.304Z,
-    updated_at: 2021-04-08T00:44:27.304Z
-  },
-  _changed: Set {},
-  _options: {
-    isNewRecord: true,
-    _schema: null,
-    _schemaDelimiter: '',
-    attributes: undefined,
-    include: undefined,
-    raw: undefined,
-    silent: undefined
-  },
-  isNewRecord: false
-}
-*/
