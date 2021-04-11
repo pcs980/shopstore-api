@@ -1,8 +1,11 @@
 import { sendEmail } from '../services/email';
 import { logger } from '../utils/logger';
+import k from '../utils/constants';
+import { JobProps } from '.';
 
-export default {
+const ConfirmEmail: JobProps = {
   key: 'ConfirmEmail',
+  priority: k.REDIS.PRIORITY_HIGH,
   async handle(job: any) {
     const { data } = job;
     logger.debug(`ConfirmEmail job: ${JSON.stringify(data)}`);
@@ -14,4 +17,6 @@ export default {
       subject: 'Confirm your e-mail'
     });
   },
-}
+};
+
+export default ConfirmEmail;

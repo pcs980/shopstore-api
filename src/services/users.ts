@@ -1,11 +1,11 @@
 import UserModel, { CreateUserRequest, UserUpdateRequest } from '../models/user';
 import { DatabaseError, RequestError } from '../errors';
+import Queue from './queue';
 import { logger } from '../utils/logger';
 import { compareHash, hashText } from '../utils/crypt';
 import { signPayload } from '../utils/jwt';
-import User from '../models/user';
-import { sendEmail } from './email';
 import { generateCode } from '../utils/generators';
+import k from '../utils/constants';
 
 export interface SigninRequest {
   email: string;
@@ -17,6 +17,39 @@ export interface GetUserRequest {
   email?: string;
 }
 
+export interface ConfirmCodeRequest {
+  id: number;
+  code: string;
+}
+
+const confirmCode = async (request: ConfirmCodeRequest): Promise<UserModel> => {
+  const user = await getOne({ id: request.id });
+  logger.debug(`Confirm code of ${user.email}: ${user.verification_code} x ${request.code}`);
+
+  if (Number(user.verification_code) !== Number(request.code)) {
+    throw new RequestError(
+      'INVALID_CODE',
+      'Your code is invalid',
+      'Verify the verification code sent to your e-mail',
+    );
+  }
+
+  if (!user.email_verified) {
+    try {
+      user.password = '';
+      user.email_verified = true;
+      const result = await update(user);
+      logger.debug(`Confirm code done: ${JSON.stringify(result)}`);
+      return result;
+    } catch (error) {
+      throw new Error(error);
+    }
+  } else {
+    logger.debug(`E-mail already verified: ${JSON.stringify(user)}`);
+    return user;
+  }
+};
+
 const create = async (user: CreateUserRequest): Promise<UserModel> => {
   try {
     const hashedPassword = await hashText(user.password);
@@ -25,16 +58,17 @@ const create = async (user: CreateUserRequest): Promise<UserModel> => {
       verification_code: generateCode(4),
       password: hashedPassword,
     });
-    logger.debug(`New user: ${JSON.stringify(result)}`);
+    const newUser = <UserModel>result.toJSON();
+    logger.debug(`New user: ${JSON.stringify(newUser)}`);
 
-    sendEmail({
-      code: result.verification_code,
-      email: result.email,
-      name: result.name,
-      subject: 'Confirm your e-mail'
-    });
+    // Create job ConfirmEmail if Redis is configured
+    if (k.REDIS.HOST) {
+      await Queue.add('ConfirmEmail', { ...newUser });
+    } else {
+      logger.warn(`Confirmation e-mail will not be sent because Redis host is not setted.`)
+    }
 
-    return <UserModel>result.toJSON();
+    return newUser;
   } catch (error) {
     logger.error(`Create user error: ${JSON.stringify(error)}`);
     if (error.name === 'SequelizeUniqueConstraintError') {
@@ -104,7 +138,7 @@ const signup = async (user: CreateUserRequest): Promise<UserModel> => {
 
 const update = async (request: UserUpdateRequest): Promise<UserModel> => {
   let count: number;
-  let rows: User[];
+  let rows: UserModel[];
   try {
     if (request.password) {
       request.password = await hashText(request.password);
@@ -139,6 +173,7 @@ const update = async (request: UserUpdateRequest): Promise<UserModel> => {
 
 export {
   create,
+  confirmCode,
   destroy,
   getOne,
   signin,

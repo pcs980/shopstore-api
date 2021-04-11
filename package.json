@@ -26,10 +26,13 @@
     "build": "tsc",
     "debug": "tsnd --inspect --respawn src/index.ts",
     "dev": "tsnd --transpile-only src/index.ts",
+    "dev:rest": "SERVICE_ROLE=REST tsnd --transpile-only src/index.ts",
+    "dev:queue": "SERVICE_ROLE=QUEUE tsnd --transpile-only src/index.ts",
     "test": "jest"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bull": "^3.22.0",
     "cors": "^2.8.5",
     "crypto-js": "^4.0.0",
     "dotenv": "^8.2.0",
@@ -43,6 +46,7 @@
   },
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
+    "@types/bull": "^3.15.0",
     "@types/cors": "^2.8.10",
     "@types/express": "^4.17.11",
     "@types/jest": "^26.0.22",
@@ -79,7 +83,7 @@
       "^.+\\.tsx?$": "ts-jest"
     },
     "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(tsx?)$",
-    "testTimeout": 8000,
+    "testTimeout": 10000,
     "moduleFileExtensions": [
       "ts",
       "tsx",

@@ -1,3 +1,4 @@
+process.env.PORT = 3030;
 process.env.LOG_LEVEL = 'debug';
 process.env.NODE_ENV = 'test';
 process.env.JWT_SK = 'Sup3r5Ecr37k3y';

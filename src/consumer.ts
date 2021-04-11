@@ -1,5 +1,4 @@
-import EmailQueue from './services/queue';
-import ConfirmEmail from './jobs/ConfirmEmail';
+import Queue from './services/queue';
 import { logger } from './utils/logger';
 import k from './utils/constants';
 
@@ -10,5 +9,5 @@ if (!k.REDIS.HOST || !k.REDIS.PORT) {
 
 export const startConsume = () => {
   logger.info(`Start consuming queues from ${k.REDIS.HOST}:${k.REDIS.PORT}`);
-  EmailQueue.process(ConfirmEmail.handle);
+  Queue.process();
 };
