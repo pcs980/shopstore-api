@@ -16,10 +16,6 @@ module.exports = {
       description: {
         type: Sequelize.STRING(150),
       },
-      code: {
-        type: Sequelize.STRING(20),
-        unique: true,
-      },
       price: {
         type: Sequelize.DECIMAL(10, 2),
         defaultValue: 0,

@@ -10,7 +10,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('EMPTY_BODY');
-          expect(body.message).toBe('Request with empty body');
+          expect(body.error).toBe('Request with empty body');
           done();
         })
         .catch((error) => {
@@ -26,7 +26,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('INVALID_REQUEST');
-          expect(body.message).toBe('Invalid name: "  "');
+          expect(body.error).toBe('Invalid name: "  "');
           done();
         })
         .catch((error) => {
@@ -42,7 +42,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('INVALID_REQUEST');
-          expect(body.message).toBe('Invalid password');
+          expect(body.error).toBe('Invalid password');
           done();
         })
         .catch((error) => {
@@ -58,7 +58,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('INVALID_REQUEST');
-          expect(body.message).toBe('Invalid e-mail address: "email.com"');
+          expect(body.error).toBe('Invalid e-mail address: "email.com"');
           done();
         })
         .catch((error) => {
@@ -75,7 +75,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('EMPTY_BODY');
-          expect(body.message).toBe('Request with empty body');
+          expect(body.error).toBe('Request with empty body');
           done();
         })
         .catch((error) => {
@@ -91,7 +91,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('INVALID_REQUEST');
-          expect(body.message).toBe('Invalid password');
+          expect(body.error).toBe('Invalid password');
           done();
         })
         .catch((error) => {
@@ -107,7 +107,7 @@ describe('User Routes', () => {
         .expect(412)
         .then(({ body }) => {
           expect(body.code).toBe('INVALID_REQUEST');
-          expect(body.message).toBe('Invalid e-mail address: "email.com"');
+          expect(body.error).toBe('Invalid e-mail address: "email.com"');
           done();
         })
         .catch((error) => {

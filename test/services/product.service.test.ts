@@ -56,12 +56,10 @@ describe('Product Service', () => {
     const request: ProductUpdateRequest = {
       id: productId,
       price: 174.10,
-      code: '7890000555'
     }
     const result = await update(request);
     expect(result.id).toBe(productId);
     expect(result.price).toBe('174.10');
-    expect(result.code).toBe('7890000555');
   });
 
   it('should delete a product by id', async () => {

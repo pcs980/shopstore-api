@@ -5,15 +5,14 @@ export interface ProductUpdateRequest {
   id: number;
   name?: string;
   description?: string;
-  code?: string;
   price?: number;
+  active?: boolean;
 }
 
 interface ProductAttributes {
   id: number;
   name: string;
   description?: string;
-  code?: string;
   price: number;
   active?: boolean;
   published_at?: Date;
@@ -26,7 +25,6 @@ class Product extends Model<ProductAttributes, CreateProductRequest> implements 
   public id!: number;
   public name!: string;
   public description!: string;
-  public code!: string;
   public price!: number;
   public active!: boolean;
   public readonly published_at!: Date;
@@ -46,10 +44,6 @@ Product.init({
   },
   description: {
     type: DataTypes.STRING(150),
-  },
-  code: {
-    type: DataTypes.STRING(20),
-    unique: true,
   },
   price: {
     type: DataTypes.DECIMAL(10, 2),
