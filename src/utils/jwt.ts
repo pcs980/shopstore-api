@@ -12,10 +12,10 @@ export const signPayload = (payload: TokenPayload): string => {
   return sign(payload, secret);
 };
 
-export const verifyToken = (token: string): boolean => {
+export const verifyToken = (token: string): any => {
   try {
-    verify(token, secret);
-    return true;
+    const payload = verify(token, secret);
+    return payload;
   } catch (error) {
     return false;
   }

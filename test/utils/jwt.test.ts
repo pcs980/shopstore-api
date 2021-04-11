@@ -14,6 +14,7 @@ describe('JWT Utilities', () => {
 
   it('should return true when token is valid', () => {
     const verify = verifyToken(token);
-    expect(verify).toBe(true);
+    expect(verify.id).toBe(15);
+    expect(verify.name).toBe('John Smith');
   });
 });
