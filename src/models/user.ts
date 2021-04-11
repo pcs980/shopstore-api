@@ -5,6 +5,7 @@ export interface UserUpdateRequest {
   id: number;
   name?: string;
   password?: string;
+  email_verified?: boolean;
 }
 
 interface UserAttributes {
