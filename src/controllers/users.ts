@@ -69,7 +69,7 @@ const signin = async (req: Request, res: Response) => {
     result.password = '';
 
     timer();
-    res.status(k.STATUS_SUCCESS).json(result);
+    res.status(k.STATUS_OK).json(result);
   } catch (error) {
     timer({ error: error.code });
     logger.error(`User signin error: ${JSON.stringify(error)}`);
