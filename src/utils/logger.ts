@@ -1,4 +1,5 @@
 import winston, { format, transports } from 'winston';
+import k from './constants';
 
 export enum LOG_LEVELS {
   ERROR = 'error',
@@ -8,7 +9,7 @@ export enum LOG_LEVELS {
 }
 
 export const logger: winston.Logger = winston.createLogger({
-  level: process.env.LOG_LEVEL,
+  level: k.SERVICE.LOG_LEVEL,
   format: format.combine(
       format.colorize(),
       format.timestamp({

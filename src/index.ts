@@ -1,12 +1,20 @@
 import 'dotenv/config';
+import app from './app';
+import { startConsume } from './consumer';
+
+import k from './utils/constants';
 import * as db from './utils/postgresql';
 import { logger } from './utils/logger';
 
-const port = process.env.PORT;
+if (k.SERVICE.ROLE === 'QUEUE' || k.SERVICE.ROLE === 'ALL') {
+  startConsume();
+}
 
-import app from './app';
+if (k.SERVICE.ROLE === 'REST' || k.SERVICE.ROLE === 'ALL') {
+  const port = k.SERVICE.PORT;
 
-app.listen(port, async () => {
-  logger.info(`Service ready and listening to port ${port}`);
-  await db.isAlive();
-});
+  app.listen(port, async () => {
+    logger.info(`Service ready and listening to port ${port}`);
+    await db.isAlive();
+  });
+}

@@ -1,12 +1,13 @@
 import nodemailer from 'nodemailer';
 import { logger } from '../utils/logger';
+import k from '../utils/constants';
 
 const transport = nodemailer.createTransport({
   host: "smtp.mailtrap.io",
   port: 2525,
   auth: {
-    user: "da0fabe8888d9c",
-    pass: "ae8342b6521953"
+    user: k.MAIL.USER,
+    pass: k.MAIL.PW
   }
 });
 

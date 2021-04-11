@@ -2,12 +2,13 @@ import {
   Sequelize
 } from 'sequelize';
 import { logger } from './logger';
+import k from './constants';
 
-const database = process.env.DB_NAME || '';
-const host = process.env.DB_URL || '';
-const port = Number(process.env.DB_PORT || 0);
-const username = process.env.DB_USER || '';
-const password = process.env.DB_PW || '';
+const database = k.DATABASE.NAME;
+const host = k.DATABASE.URL;
+const port = k.DATABASE.PORT;
+const username = k.DATABASE.USER;
+const password = k.DATABASE.PW;
 
 const sequelize = new Sequelize({
   dialect: 'postgres',

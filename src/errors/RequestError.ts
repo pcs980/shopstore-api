@@ -5,9 +5,9 @@ export default class RequestError extends Error {
 
   constructor(
     public code: string,
-    public reason: string,
+    public message: string,
     public detail: string,
   ) {
-    super(reason);
+    super(message);
   }
 }
