@@ -36,9 +36,10 @@ const confirmCode = async (request: ConfirmCodeRequest): Promise<UserModel> => {
 
   if (!user.email_verified) {
     try {
-      user.password = '';
-      user.email_verified = true;
-      const result = await update(user);
+      const result = await update({
+        id: request.id,
+        email_verified: true,
+      });
       logger.debug(`Confirm code done: ${JSON.stringify(result)}`);
       return result;
     } catch (error) {
