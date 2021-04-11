@@ -17,7 +17,19 @@ const validText = (text: string): boolean => {
   return true;
 };
 
+const validNumber = (number: number | string): boolean => {
+  if (!number) {
+    return false;
+  }
+  if (isNaN(Number(number))) {
+    return false;
+  }
+
+  return true;
+};
+
 export {
   validEmail,
+  validNumber,
   validText
 };

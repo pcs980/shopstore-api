@@ -2,9 +2,41 @@ import { Request, Response } from 'express';
 import * as service from '../services/users';
 import * as messages from '../utils/messages';
 import k from '../utils/constants';
-import { validEmail, validText } from '../utils/valid';
+import { validEmail, validNumber, validText } from '../utils/valid';
 import { logger } from '../utils/logger';
 import { startUserRequestTimer } from '../utils/metrics';
+
+const confirmCode = async (req: Request, res: Response) => {
+  const timer = startUserRequestTimer('signup');
+
+  logger.debug(`signup request: ${req.body.email}`);
+  if (Object.keys(req.body).length === 0) {
+    return res.status(k.STATUS_INVALID_REQUEST).json(messages.emptyBody);
+  }
+
+  const { id, code } = req.body;
+  if (!validNumber(id)) {
+    return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidId(id));
+  } else if (!validNumber(code)) {
+    return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidConfirmationCode(code));
+  }
+
+  try {
+    const result = await service.confirmCode({ id, code });
+    timer();
+    res.status(k.STATUS_OK).json(result);
+  } catch (error) {
+    timer({ error: error.code });
+    logger.error(`Confirm code error: ${JSON.stringify(error)}`);
+    if (error.name !== k.STATUS_INTERNAL_ERROR) {
+      return res.status(k.STATUS_INVALID_REQUEST).json({
+        ...error,
+        error: error.message,
+      });
+    }
+    res.status(k.STATUS_INTERNAL_ERROR).json({...error});
+  }
+};
 
 const signup = async (req: Request, res: Response) => {
   const timer = startUserRequestTimer('signup');
@@ -84,6 +116,7 @@ const signin = async (req: Request, res: Response) => {
 };
 
 export {
+  confirmCode,
   signin,
   signup,
 };
