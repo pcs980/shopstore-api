@@ -4,18 +4,16 @@ import sequelize from '../utils/postgresql';
 interface ProductImageAttributes {
   id: number;
   product_id: number;
-  image_type: string;
-  image_name?: any;
+  image_name: any;
   created_at?: Date;
   updated_at?: Date;
 }
-export interface CreateProductRequest extends
+export interface CreateProductImageRequest extends
   Optional<ProductImageAttributes, 'id' | 'created_at' | 'updated_at'> {}
 
-class ProductImage extends Model<ProductImageAttributes, CreateProductRequest> implements ProductImageAttributes {
+class ProductImage extends Model<ProductImageAttributes, CreateProductImageRequest> implements ProductImageAttributes {
   public id!: number;
   public product_id!: number;
-  public image_type!: string;
   public image_name!: any;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
@@ -30,18 +28,11 @@ ProductImage.init({
   product_id: {
     type: DataTypes.BIGINT,
     allowNull: false,
-    references: {
-      model: 'Product',
-      key: 'id'
-    },
-  },
-  image_type: {
-    type: DataTypes.STRING(15),
-    allowNull: false,
   },
   image_name: {
     type: DataTypes.STRING(50),
     allowNull: false,
+    unique: true,
   },
 }, {
   sequelize,

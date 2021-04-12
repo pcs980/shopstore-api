@@ -15,18 +15,20 @@ interface ProductAttributes {
   name: string;
   description?: string;
   price: number;
+  images?: ProductImage[];
   active?: boolean;
   published_at?: Date;
   updated_at?: Date;
 }
 export interface CreateProductRequest extends
-  Optional<ProductAttributes, 'id' | 'published_at' | 'updated_at'> {}
+  Optional<ProductAttributes, 'id' | 'published_at' | 'updated_at' | 'images'> {}
 
 class Product extends Model<ProductAttributes, CreateProductRequest> implements ProductAttributes {
   public id!: number;
   public name!: string;
   public description!: string;
   public price!: number;
+  public images!: ProductImage[];
   public active!: boolean;
   public readonly published_at!: Date;
   public readonly updated_at!: Date;
@@ -61,8 +63,5 @@ Product.init({
   createdAt: 'published_at',
   updatedAt: 'updated_at',
 });
-
-Product.hasMany(ProductImage);
-ProductImage.belongsTo(Product);
 
 export default Product;

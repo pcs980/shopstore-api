@@ -12,4 +12,7 @@ userRoutes(app);
 productRoutes(app);
 systemRoutes(app);
 
+app.use(express.static('public'));
+app.use('/images', express.static(__dirname + '/images'));
+
 export default app;

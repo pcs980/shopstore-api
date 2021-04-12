@@ -7,7 +7,7 @@ import { logger } from '../utils/logger';
 import { startUserRequestTimer } from '../utils/metrics';
 
 const confirmCode = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('signup');
+  const timer = startUserRequestTimer('confirm_code');
 
   logger.debug(`signup request: ${req.body.email}`);
   if (Object.keys(req.body).length === 0) {
