@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../utils/postgresql';
+import ProductImage from './productImage';
 
 export interface ProductUpdateRequest {
   id: number;
@@ -60,5 +61,8 @@ Product.init({
   createdAt: 'published_at',
   updatedAt: 'updated_at',
 });
+
+Product.hasMany(ProductImage);
+ProductImage.belongsTo(Product);
 
 export default Product;
