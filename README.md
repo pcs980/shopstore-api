@@ -72,8 +72,7 @@ The following sections describe all REST APIs contracts.
 
 #### Signup
 
-> Endpoint: `POST /signup`
-
+> Endpoint: `POST /signup`\
 > Metric label: user_signup
 
 Create an user account and returns authorization token.
@@ -96,15 +95,14 @@ Create an user account and returns authorization token.
 | password          | string     |
 | token             | string     |
 | verification_code | string     |
-- `| email_verified    | boolean    |`
+| email_verified    | boolean    |
 | registered_at     | Date       |
 | updated_at        | Date       |
 | token             | string     |
 
 #### Signin
 
-> Endpoint: `POST /signin`
-
+> Endpoint: `POST /signin`\
 > Metric label: user_signin
 
 Receives user credential, already registered, and returns authorization code.
@@ -126,7 +124,7 @@ Receives user credential, already registered, and returns authorization code.
 | password          | string     |
 | token             | string     |
 | verification_code | string     |
-- `| email_verified    | boolean    |`
+| email_verified    | boolean    |
 | registered_at     | Date       |
 | updated_at        | Date       |
 | token             | string     |
@@ -135,11 +133,10 @@ Verify user credential, email and passord, and returns authorization code.
 
 ### Confirm code
 
-> Endpoint: `POST /users/confirm`
-
+> Endpoint: `POST /users/confirm`\
 > Metric label: user_confirm_code
 
-Receives e-mail confirmation code and validate it.
+Submit verification code to validation. If code is valid, update `email_verification` and return user data.
 
 **Request body**:
 
@@ -158,20 +155,21 @@ Receives e-mail confirmation code and validate it.
 | password          | string     |
 | token             | string     |
 | verification_code | string     |
-- `| email_verified    | boolean    |`
+| email_verified    | boolean    |
 | registered_at     | Date       |
 | updated_at        | Date       |
 | token             | string     |
 
 ## Product services
 
-**Important:** the user authorization token is necessary to execute all product services.
+**Important:** the user authorization token is necessary to execute all product services. Add `Authorization` header to each request.
 
-### Create
+### Create product
 
-> Endpoint: `POST /products`
-
+> Endpoint: `POST /products`\
 > Metric label: product_create
+
+Create a new product.
 
 **Request body**:
 
@@ -207,11 +205,12 @@ Receives e-mail confirmation code and validate it.
 1) Use current date and time.
 2) List of images saved.
 
-### Update
+### Update product
 
-> Endpoint: `PUT /products/:id`
-
+> Endpoint: `PUT /products/:id`\
 > Metric label: product_update
+
+Update a product identified by it's id in query parameter.
 
 **Request parameter**:
 
@@ -228,10 +227,10 @@ Receives e-mail confirmation code and validate it.
 | price          | number     | yes
 | active         | boolean    | no
 | base64images   | string[]   | no (1)
-| removedImageIds| string[]   | no (2)
+| removedImageIds| object[]   | no (2)
 
 1) List of new images added to product.
-2) List of ids of old images to remove.
+2) List of old images to remove.
 
 **Response body**:
 
@@ -251,11 +250,12 @@ Receives e-mail confirmation code and validate it.
 | images.created_at | Date       |
 | images.updated_at | Date       |
 
-### Get
+### Get products
 
-> Endpoint: `GET /products`
-
+> Endpoint: `GET /products`\
 > Metric label: product_get
+
+Get all products.
 
 **Request body**:
 
@@ -275,17 +275,18 @@ A array of product objects:
 | published_at  | Date       |
 | updated_at    | Date       |
 
-### Get product image
+### Get product images
 
-> Endpoint: `GET /products/:id/images`
-
+> Endpoint: `GET /products/:id/images`\
 > Metric label: product_get_images
+
+Get images of a given product id.
 
 **Request parameter**:
 
-| Parameter     | Data type  |
-| ------------- | ---------- |
-| id            | number     |
+| Parameter  | Data type  |
+| ---------- | ---------- |
+| id         | number     |
 
 **Request body**:
 

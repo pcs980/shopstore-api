@@ -16,6 +16,11 @@ const queues = Object.values(jobs).map((job) => {
     }
   });
 
+  queue.on('error', (error) => {
+    logger.error(`Queue error: ${JSON.stringify(error)}`);
+    process.exit(-1);
+  });
+
   queue.on('failed', (job) => {
     logger.error(`Job failed: ${job.queue.name}, reason: ${job.failedReason}, data: ${JSON.stringify(job.data)}`);
     incrementJobFail(job.queue.name);

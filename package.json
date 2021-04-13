@@ -28,7 +28,7 @@
     "dev": "tsnd --transpile-only src/index.ts",
     "dev:rest": "SERVICE_ROLE=REST tsnd --transpile-only src/index.ts",
     "dev:queue": "SERVICE_ROLE=QUEUE tsnd --transpile-only src/index.ts",
-    "start": "tsc && node build/src/index.js",
+    "start": "tsc && node build/index.js",
     "test": "jest"
   },
   "dependencies": {
