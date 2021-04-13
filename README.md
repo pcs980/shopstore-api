@@ -41,7 +41,7 @@ A [Postman collection file](Shopstore%20API.postman_collection.json) is included
 
 If you want to use your own PostgreSQL, please set the connection values (host, port, database name, user and password) in [.env file](.env) and also in [Sequelize config file](config/config.json).
 
-Make sure that [sequelize-cli]() is installed and execute in terminal inside project's folder:
+Make sure that [sequelize-cli](https://www.npmjs.com/package/sequelize-cli) is installed and execute in terminal inside project's folder:
 
 ```sh
 sequelize db:migrate
