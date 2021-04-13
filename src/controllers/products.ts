@@ -8,7 +8,7 @@ import { validNumber, validText } from '../utils/valid';
 import { storeLocalFiles } from '../services/storage';
 
 const create = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('signup');
+  const timer = startUserRequestTimer('product_create');
 
   logger.debug(`Create Product request: ${JSON.stringify(req.body.name)}`);
   if (Object.keys(req.body).length === 0) {
@@ -28,7 +28,7 @@ const create = async (req: Request, res: Response) => {
       name,
       price,
       description,
-      active,
+      active: active ? active : true,
     });
 
   } catch (error) {
@@ -59,7 +59,7 @@ const create = async (req: Request, res: Response) => {
 };
 
 const get = async (_: Request, res: Response) => {
-  const timer = startUserRequestTimer('get_products');
+  const timer = startUserRequestTimer('product_get');
 
   try {
     const result = await service.getAll({});
@@ -79,7 +79,7 @@ const get = async (_: Request, res: Response) => {
 };
 
 const getImages = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('get_images');
+  const timer = startUserRequestTimer('product_get_images');
 
   logger.debug(`get product images request: ${JSON.stringify(req.body)}`);
 
@@ -106,7 +106,7 @@ const getImages = async (req: Request, res: Response) => {
 };
 
 const update = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('update_products');
+  const timer = startUserRequestTimer('product_update');
 
   logger.debug(`Update Product request: ${JSON.stringify(req.body.name)}`);
   if (Object.keys(req.body).length === 0) {

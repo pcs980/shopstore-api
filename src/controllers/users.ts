@@ -7,7 +7,7 @@ import logger from '../utils/logger';
 import { startUserRequestTimer } from '../utils/metrics';
 
 const confirmCode = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('confirm_code');
+  const timer = startUserRequestTimer('user_confirm_code');
 
   logger.debug(`signup request: ${req.body.email}`);
   if (Object.keys(req.body).length === 0) {
@@ -39,7 +39,7 @@ const confirmCode = async (req: Request, res: Response) => {
 };
 
 const signup = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('signup');
+  const timer = startUserRequestTimer('user_signup');
 
   logger.debug(`signup request: ${req.body.email}`);
   if (Object.keys(req.body).length === 0) {
@@ -79,7 +79,7 @@ const signup = async (req: Request, res: Response) => {
 };
 
 const signin = async (req: Request, res: Response) => {
-  const timer = startUserRequestTimer('signin');
+  const timer = startUserRequestTimer('user_signin');
 
   logger.debug(`signin request: ${req.body.email}`);
   if (Object.keys(req.body).length === 0) {
