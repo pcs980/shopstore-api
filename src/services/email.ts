@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import k from '../utils/constants';
 
 const transport = nodemailer.createTransport({

@@ -1,5 +1,5 @@
 import { CreateUserRequest, UserUpdateRequest } from '../../src/models/user';
-import { create, destroy, getOne, signin, signup, update } from '../../src/services/users';
+import { confirmCode, create, destroy, getOne, signin, signup, update } from '../../src/services/users';
 
 describe('User Service', () => {
   let userId = 0;
@@ -71,6 +71,15 @@ describe('User Service', () => {
       fail();
     } catch (error) {
       expect(error.code).toBe('NOT_FOUND');
+    }
+  });
+
+  it('should throw error when confirm code is invalid', async () => {
+    try {
+      await confirmCode({ id: userId, code: '9999' });
+      fail();
+    } catch (error) {
+      expect(error.code).toBe('INVALID_CODE');
     }
   });
 

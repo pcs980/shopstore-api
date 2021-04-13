@@ -1,7 +1,7 @@
 import {
   Sequelize
 } from 'sequelize';
-import { logger } from './logger';
+import logger from './logger';
 import k from './constants';
 
 const database = k.DATABASE.NAME;

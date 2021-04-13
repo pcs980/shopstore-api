@@ -1,5 +1,5 @@
 import { CreateProductRequest, ProductUpdateRequest } from '../../src/models/product';
-import { create, destroy, getOne, update } from '../../src/services/products';
+import { create, destroy, getAll, getOne, update } from '../../src/services/products';
 
 describe('Product Service', () => {
   let productId = 0;
@@ -28,13 +28,10 @@ describe('Product Service', () => {
     expect(result.price).toBe('88.96');
   });
 
-  it('should throw error when product is not found', async () => {
-    try {
-      await getOne({ id: 9999 });
-      fail();
-    } catch (error) {
-      expect(error.code).toBe('NOT_FOUND');
-    }
+  it('should return empty array when product is not found', async () => {
+    const result = await getAll({ id: 9999 });
+    expect(result).not.toBeUndefined();
+    expect(result).toHaveLength(0);
   });
 
   it('should throw error if product name is duplicated', async () => {

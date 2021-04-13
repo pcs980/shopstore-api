@@ -1,7 +1,7 @@
 import Queue from 'bull';
 import k from '../utils/constants';
 import * as jobs from '../jobs';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import { incrementJobFail } from '../utils/metrics';
 
 const queues = Object.values(jobs).map((job) => {

@@ -1,5 +1,5 @@
 import { sendEmail } from '../services/email';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import k from '../utils/constants';
 import { JobProps } from '.';
 

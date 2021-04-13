@@ -1,12 +1,17 @@
 import Product, { CreateProductRequest, ProductUpdateRequest } from '../models/product';
 import ProductImage from '../models/productImage';
 import { DatabaseError } from '../errors';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 
 export interface GetProductRequest {
   id?: number;
   name?: string;
   code?: string;
+}
+
+export interface DestroyImagesRequest {
+  id?: number;
+  product_id?: number;
 }
 
 const create = async (product: CreateProductRequest): Promise<Product> => {
@@ -28,6 +33,7 @@ const create = async (product: CreateProductRequest): Promise<Product> => {
 };
 
 const destroy = async (id: number): Promise<boolean> => {
+  await destroyImage({ product_id: id });
   const result = await Product.destroy({ where: { id }});
   return result > 0;
 };
@@ -80,8 +86,13 @@ const update = async (request: ProductUpdateRequest): Promise<Product> => {
   return <Product>rows[0].toJSON();
 };
 
-const destroyImage = async (id: number): Promise<boolean> => {
-  const result = await ProductImage.destroy({ where: { id }});
+const destroyImage = async (request: DestroyImagesRequest): Promise<boolean> => {
+  if (!request.id && !request.product_id) {
+    return false;
+  }
+  const result = await ProductImage.destroy({
+    where: { ...request }
+  });
   return result > 0;
 };
 

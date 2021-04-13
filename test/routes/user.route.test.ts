@@ -67,6 +67,7 @@ describe('User Routes', () => {
         });
     });
   });
+
   describe('POST /signin', () => {
     it('should return error if body is empty', async (done) => {
       request(app)
@@ -108,6 +109,40 @@ describe('User Routes', () => {
         .then(({ body }) => {
           expect(body.code).toBe('INVALID_REQUEST');
           expect(body.error).toBe('Invalid e-mail address: "email.com"');
+          done();
+        })
+        .catch((error) => {
+          console.log(error);
+          done(error);
+        });
+    });
+  });
+
+  describe('POST /users/confirm', () => {
+    it('should return error if body is empty', async (done) => {
+      request(app)
+        .post('/users/confirm')
+        .send({})
+        .expect(412)
+        .then(({ body }) => {
+          expect(body.code).toBe('EMPTY_BODY');
+          expect(body.error).toBe('Request with empty body');
+          done();
+        })
+        .catch((error) => {
+          console.log(error);
+          done(error);
+        });
+    });
+
+    it('should return error if confirmation code is invalid', async (done) => {
+      request(app)
+        .post('/users/confirm')
+        .send({id: 15})
+        .expect(412)
+        .then(({ body }) => {
+          expect(body.code).toBe('INVALID_REQUEST');
+          expect(body.error).toBe('Invalid confirmation code: "undefined"');
           done();
         })
         .catch((error) => {

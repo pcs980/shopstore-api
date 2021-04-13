@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { InternalError } from '../errors';
 import { generateUuid } from '../utils/generators';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 
 interface DecodedBase64 {
   type: string;

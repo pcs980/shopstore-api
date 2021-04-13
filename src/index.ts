@@ -4,7 +4,7 @@ import { startConsume } from './consumer';
 
 import k from './utils/constants';
 import * as db from './utils/postgresql';
-import { logger } from './utils/logger';
+import logger from './utils/logger';
 
 if (k.SERVICE.ROLE === 'QUEUE' || k.SERVICE.ROLE === 'ALL') {
   startConsume();

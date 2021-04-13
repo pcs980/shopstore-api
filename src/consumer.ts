@@ -1,5 +1,5 @@
 import Queue from './services/queue';
-import { logger } from './utils/logger';
+import logger from './utils/logger';
 import k from './utils/constants';
 
 if (!k.REDIS.HOST || !k.REDIS.PORT) {

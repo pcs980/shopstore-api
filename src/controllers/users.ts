@@ -3,7 +3,7 @@ import * as service from '../services/users';
 import * as messages from '../utils/messages';
 import k from '../utils/constants';
 import { validEmail, validNumber, validText } from '../utils/valid';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import { startUserRequestTimer } from '../utils/metrics';
 
 const confirmCode = async (req: Request, res: Response) => {
@@ -15,9 +15,9 @@ const confirmCode = async (req: Request, res: Response) => {
   }
 
   const { id, code } = req.body;
-  if (!validNumber(id)) {
+  if (!validNumber(id) || id < 0) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidId(id));
-  } else if (!validNumber(code)) {
+  } else if (!validNumber(code) || id < 0) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidConfirmationCode(code));
   }
 

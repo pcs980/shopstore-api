@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import * as service from '../services/products';
 import * as messages from '../utils/messages';
 import k from '../utils/constants';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import { startUserRequestTimer } from '../utils/metrics';
 import { validNumber, validText } from '../utils/valid';
 import { storeLocalFiles } from '../services/storage';
@@ -18,7 +18,7 @@ const create = async (req: Request, res: Response) => {
   const { name, price, description, active, base64images } = req.body;
   if (!validText(name)) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidName(name));
-  } else if (!validNumber(price)) {
+  } else if (!validNumber(price) || price <= 0) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidPrice(price));
   }
 
@@ -147,7 +147,9 @@ const update = async (req: Request, res: Response) => {
   if (removedImageIds && Array.isArray(removedImageIds)) {
     logger.debug(`Should remove ${removedImageIds.length} images.`);
     try {
-      removedImageIds.map((id) => service.destroyImage(id));
+      removedImageIds.map((id) => service.destroyImage({
+        product_id: id,
+      }));
     } catch (error) {
       timer({ error: error.code });
       logger.error(`Remove image error: ${error.message}`);

@@ -8,7 +8,7 @@ export enum LOG_LEVELS {
   DEBUG = 'debug',
 }
 
-export const logger: winston.Logger = winston.createLogger({
+const logger: winston.Logger = winston.createLogger({
   level: k.SERVICE.LOG_LEVEL,
   format: format.combine(
       format.colorize(),
@@ -21,3 +21,5 @@ export const logger: winston.Logger = winston.createLogger({
     new transports.Console()
   ]
 });
+
+export default logger;

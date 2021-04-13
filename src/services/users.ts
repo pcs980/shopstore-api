@@ -1,7 +1,7 @@
 import UserModel, { CreateUserRequest, UserUpdateRequest } from '../models/user';
 import { DatabaseError, RequestError } from '../errors';
 import Queue from './queue';
-import { logger } from '../utils/logger';
+import logger from '../utils/logger';
 import { compareHash, hashText } from '../utils/crypt';
 import { signPayload } from '../utils/jwt';
 import { generateCode } from '../utils/generators';
