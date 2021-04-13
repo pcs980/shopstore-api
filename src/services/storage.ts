@@ -8,6 +8,19 @@ interface DecodedBase64 {
   data: Buffer;
 }
 
+const addExtension = (filename: string, mimetype = ''): string => {
+  filename = removeExtension(filename);
+  const slash = mimetype.indexOf('/');
+  if (slash < 0) {
+    return filename;
+  }
+  const extension = mimetype.substring(slash + 1);
+  if (extension === 'jpeg') {
+    return `${filename}.jpg`;
+  }
+  return `${filename}.${extension}`;
+};
+
 const createPublicImageFolder = () => {
   try {
     fs.mkdirSync('public/images', { recursive: true });
@@ -23,17 +36,9 @@ const createPublicImageFolder = () => {
   }
 };
 
-const addExtension = (filename: string, mimetype = ''): string => {
-  filename = removeExtension(filename);
-  const slash = mimetype.indexOf('/');
-  if (slash < 0) {
-    return filename;
-  }
-  const extension = mimetype.substring(slash + 1);
-  if (extension === 'jpeg') {
-    return `${filename}.jpg`;
-  }
-  return `${filename}.${extension}`;
+const getFilename = (path: string): string => {
+  const parts = path.split('/');
+  return parts[parts.length - 1];
 };
 
 const removeExtension = (filename = ''): string => {
@@ -57,6 +62,14 @@ const decodeBase64 = (base64string: string): DecodedBase64 => {
   };
 };
 
+const removeLocalFiles = (filename: string): void => {
+  try {
+    fs.unlinkSync(`public/images/${getFilename(filename)}`);
+  } catch (error) {
+    logger.error(`Remove file error: ${error.message}`);
+  }
+}
+
 const storeLocalFiles = async (base64files: string[]): Promise<string[]> => {
   createPublicImageFolder();
 
@@ -72,10 +85,10 @@ const storeLocalFiles = async (base64files: string[]): Promise<string[]> => {
     return filenames.push(filename);
   });
 
-
   return filenames;
 };
 
 export {
+  removeLocalFiles,
   storeLocalFiles
 };

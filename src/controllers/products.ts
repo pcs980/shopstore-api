@@ -5,7 +5,7 @@ import k from '../utils/constants';
 import logger from '../utils/logger';
 import { startUserRequestTimer } from '../utils/metrics';
 import { validNumber, validText } from '../utils/valid';
-import { storeLocalFiles } from '../services/storage';
+import { removeLocalFiles, storeLocalFiles } from '../services/storage';
 
 const create = async (req: Request, res: Response) => {
   const timer = startUserRequestTimer('product_create');
@@ -144,12 +144,13 @@ const update = async (req: Request, res: Response) => {
     return res.status(k.STATUS_INTERNAL_ERROR).json({...error});
   }
 
-  if (removedImageIds && Array.isArray(removedImageIds)) {
+  if (removedImageIds && Array.isArray(removedImageIds) && removedImageIds.length > 0) {
     logger.debug(`Should remove ${removedImageIds.length} images.`);
     try {
-      removedImageIds.map((id) => service.destroyImage({
-        product_id: id,
-      }));
+      removedImageIds.forEach((image) => {
+        removeLocalFiles(image.image_name);
+        service.destroyImage({id: image.id})
+      });
     } catch (error) {
       timer({ error: error.code });
       logger.error(`Remove image error: ${error.message}`);
@@ -157,7 +158,7 @@ const update = async (req: Request, res: Response) => {
     }
   }
 
-  if (base64images) {
+  if (base64images && Array.isArray(base64images) && base64images.length > 0) {
     logger.debug(`Should store ${base64images.length} images.`);
     try {
       const images = await storeLocalFiles(base64images);
