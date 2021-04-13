@@ -44,11 +44,6 @@ const getAll = async (request: GetProductRequest): Promise<Product[]> => {
   });
   if (!products || products.length === 0) {
     logger.warn(`Product not found: ${JSON.stringify(request)}`);
-    throw new DatabaseError(
-      'NOT_FOUND',
-      'Product not found',
-      JSON.stringify(request),
-    );
   }
 
   return products;
