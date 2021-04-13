@@ -8,7 +8,7 @@ interface DecodedBase64 {
   data: Buffer;
 }
 
-const createPublicImagesPath = () => {
+const createPublicImageFolder = () => {
   try {
     fs.mkdirSync('public/images', { recursive: true });
   } catch (error) {
@@ -58,7 +58,7 @@ const decodeBase64 = (base64string: string): DecodedBase64 => {
 };
 
 const storeLocalFiles = async (base64files: string[]): Promise<string[]> => {
-  createPublicImagesPath();
+  createPublicImageFolder();
 
   const filenames: string[] = [];
 

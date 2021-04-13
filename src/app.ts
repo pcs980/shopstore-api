@@ -5,7 +5,7 @@ import userRoutes from './routes/users';
 import productRoutes from './routes/products';
 
 const app = express();
-app.use(express.json());
+app.use(express.json({ limit: '2MB' }));
 app.use(cors());
 
 userRoutes(app);

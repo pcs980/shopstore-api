@@ -10,12 +10,12 @@ import { storeLocalFiles } from '../services/storage';
 const create = async (req: Request, res: Response) => {
   const timer = startUserRequestTimer('signup');
 
-  logger.debug(`Create Product request: ${JSON.stringify(req.body)}`);
+  logger.debug(`Create Product request: ${JSON.stringify(req.body.name)}`);
   if (Object.keys(req.body).length === 0) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.emptyBody);
   }
 
-  const { name, price, base64images } = req.body;
+  const { name, price, description, active, base64images } = req.body;
   if (!validText(name)) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidName(name));
   } else if (!validNumber(price)) {
@@ -27,8 +27,8 @@ const create = async (req: Request, res: Response) => {
     result = await service.create({
       name,
       price,
-      description: req.body.description,
-      active: req.body.active,
+      description,
+      active,
     });
 
   } catch (error) {
@@ -108,31 +108,30 @@ const getImages = async (req: Request, res: Response) => {
 const update = async (req: Request, res: Response) => {
   const timer = startUserRequestTimer('update_products');
 
-  logger.debug(`update product request: ${JSON.stringify(req.body)}`);
+  logger.debug(`Update Product request: ${JSON.stringify(req.body.name)}`);
   if (Object.keys(req.body).length === 0) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.emptyBody);
   }
 
   const { id } = req.params;
-  const { name, description, price, active } = req.body;
+  const { name, description, price, active, base64images, removedImageIds } = req.body;
   if (!validNumber(id)) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidId(id));
   } else if (!validText(name)) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidName(name));
   } if (!validNumber(price)) {
     return res.status(k.STATUS_INVALID_REQUEST).json(messages.invalidPrice(price));
-  } else
+  }
 
+  let result;
   try {
-    const result = await service.update({
+    result = await service.update({
       id: Number(id),
       name,
       description,
       price,
       active,
     });
-    timer();
-    res.status(k.STATUS_OK).json(result);
   } catch (error) {
     timer({ error: error.code });
     logger.error(`Product get error: ${JSON.stringify(error)}`);
@@ -142,8 +141,34 @@ const update = async (req: Request, res: Response) => {
         error: error.message,
       });
     }
-    res.status(k.STATUS_INTERNAL_ERROR).json({...error});
+    return res.status(k.STATUS_INTERNAL_ERROR).json({...error});
   }
+
+  if (removedImageIds && Array.isArray(removedImageIds)) {
+    logger.debug(`Should remove ${removedImageIds.length} images.`);
+    try {
+      removedImageIds.map((id) => service.destroyImage(id));
+    } catch (error) {
+      timer({ error: error.code });
+      logger.error(`Remove image error: ${error.message}`);
+      return res.status(k.STATUS_INTERNAL_ERROR).json({ error: error.message });
+    }
+  }
+
+  if (base64images) {
+    logger.debug(`Should store ${base64images.length} images.`);
+    try {
+      const images = await storeLocalFiles(base64images);
+      result.images = await service.saveImages(result.id, images);
+    } catch (error) {
+      timer({ error: error.code });
+      logger.error(`Store image error: ${error.message}`);
+      return res.status(k.STATUS_INTERNAL_ERROR).json({ error: error.message });
+    }
+  }
+
+  timer();
+  res.status(k.STATUS_OK).json(result);
 };
 
 export {

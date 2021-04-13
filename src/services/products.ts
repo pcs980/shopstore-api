@@ -28,11 +28,7 @@ const create = async (product: CreateProductRequest): Promise<Product> => {
 };
 
 const destroy = async (id: number): Promise<boolean> => {
-  const result = await Product.destroy({
-    where: {
-      id
-    }
-  });
+  const result = await Product.destroy({ where: { id }});
   return result > 0;
 };
 
@@ -42,7 +38,10 @@ const getOne = async (request: GetProductRequest): Promise<Product> => {
 };
 
 const getAll = async (request: GetProductRequest): Promise<Product[]> => {
-  const products = await Product.findAll({ where: { ...request } });
+  const products = await Product.findAll({
+    where: { ...request },
+    order: ['name'],
+  });
   if (!products || products.length === 0) {
     logger.warn(`Product not found: ${JSON.stringify(request)}`);
     throw new DatabaseError(
@@ -53,11 +52,6 @@ const getAll = async (request: GetProductRequest): Promise<Product[]> => {
   }
 
   return products;
-};
-
-const getImages = async (productId: number): Promise<ProductImage[]> => {
-  const images = await ProductImage.findAll({ where: { product_id: productId }});
-  return images;
 };
 
 const update = async (request: ProductUpdateRequest): Promise<Product> => {
@@ -91,6 +85,16 @@ const update = async (request: ProductUpdateRequest): Promise<Product> => {
   return <Product>rows[0].toJSON();
 };
 
+const destroyImage = async (id: number): Promise<boolean> => {
+  const result = await ProductImage.destroy({ where: { id }});
+  return result > 0;
+};
+
+const getImages = async (productId: number): Promise<ProductImage[]> => {
+  const images = await ProductImage.findAll({ where: { product_id: productId }});
+  return images;
+};
+
 const saveImages = async (productId: number, images: string[]): Promise<ProductImage[]> => {
   try {
     const promises = images.map((image) => (
@@ -118,6 +122,7 @@ const saveImages = async (productId: number, images: string[]): Promise<ProductI
 export {
   create,
   destroy,
+  destroyImage,
   getAll,
   getImages,
   getOne,
