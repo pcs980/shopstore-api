@@ -2,18 +2,41 @@
 
 ## Run App
 
-This server app has two roles: `QUEUE` and `REST`. Defined in `SERVICE_ROLE` environment variable.
+### Before run
 
-With `REST` role the app will receive API requests. And with `QUEUE` role the app will consume messages of a running Redis instance.
+This server app has two roles: `QUEUE` and `REST`. Defined in `SERVICE_ROLE` environment variable. With `REST` role the app will receive API requests. And with `QUEUE` role the app will consume messages of a running Redis instance.
 
 Leave the environment variable unset to run an unique instance with both roles.
 
-The [.env file](.env) was committed to quickly start the server with both roles and all test environment variables for PostgreSQL database, SMTP server and Redis. Just get into the project's folder using a terminal and type the commands below:
+The [.env file](.env) was committed with environment variables for PostgreSQL database as a service, Mailtrap SMTP server and Redis running locally. But you have to set SMTP server to view e-mail verification codes.
+
+So, before run set the following entries in .env file...
+
+SMTP server:
+
+- `MAIL_HOST`
+- `MAIL_PORT`
+- `MAIL_USER`
+- `MAIL_PW`
+
+If not set, instances with roles `REST` will crash at start.
+
+Redis server:
+
+- `REDIS_HOST`
+- `REDIS_PORT`
+
+If not set, instances with roles `QUEUE` will crash at start.
+
+### Running
+
+Just get into the project's folder using a terminal and type the commands below:
 
 ```
 npm install
 npm run dev
 ```
+
 A [Postman collection file](Shopstore%20API.postman_collection.json) is included to help API testing.
 
 If you want to use your own PostgreSQL, please set the connection values (host, port, database name, user and password) in [.env file](.env) and also in [Sequelize config file](config/config.json).
@@ -73,7 +96,7 @@ Create an user account and returns authorization token.
 | password          | string     |
 | token             | string     |
 | verification_code | string     |
-| email_verified    | boolean    |
+- `| email_verified    | boolean    |`
 | registered_at     | Date       |
 | updated_at        | Date       |
 | token             | string     |
@@ -103,7 +126,7 @@ Receives user credential, already registered, and returns authorization code.
 | password          | string     |
 | token             | string     |
 | verification_code | string     |
-| email_verified    | boolean    |
+- `| email_verified    | boolean    |`
 | registered_at     | Date       |
 | updated_at        | Date       |
 | token             | string     |
@@ -135,7 +158,7 @@ Receives e-mail confirmation code and validate it.
 | password          | string     |
 | token             | string     |
 | verification_code | string     |
-| email_verified    | boolean    |
+- `| email_verified    | boolean    |`
 | registered_at     | Date       |
 | updated_at        | Date       |
 | token             | string     |
@@ -219,9 +242,9 @@ Receives e-mail confirmation code and validate it.
 | description       | string     |
 | price             | number     |
 | active            | boolean    |
-| published_at      | Date (1)   |
+| published_at      | Date       |
 | updated_at        | Date       |
-| images            | object[] (2) |
+| images            | object[]   |
 | images.id         | number     |
 | images.product_id | number     |
 | images.image_name | string     |
